@@ -1,0 +1,39 @@
+$colors:(
+  'blue':#2d80ed,
+  'black':#000,
+  'white':#fff,
+  'grey':#f6f7f8,
+  'footer':#000,
+  'summary':#bbb,
+  'border':#f3f3f3,
+  'publishText':#c1c1c1,
+  'publishBg':#f7f7f7,
+  'closeBtn':#b2bac2,
+  'inputBorder':#e8e8e8,
+  'newsFlashInfoBg':#f5f5f5,
+  'dashed':#dadada,
+  'points':rgba(253, 98, 98, 0.07058823529411765),
+  'titleMark':rgb(96, 125, 139),
+  'blackOpacity':rgba(0,0,0,.8),
+  'whiteOpacity':rgba(255,255,255,.8)
+);
+$spacing-types: (
+  m: margin,
+  p: padding,
+);
+$spacing-direction: (
+  t: top,
+  r: right,
+  b: bottom,
+  l: left,
+);
+$spacing-base-size: 1rem;
+$spacing-sizes: (
+  0: 0,
+  1: 0.25,
+  2: 0.5,
+  3: 1,
+  4: 1.5,
+  5: 3,
+);
+
