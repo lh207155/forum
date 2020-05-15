@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Main from "../views/Main";
-import Index from "../views/home/Index";
+import Home from "../views/home/Home";
+import Article from "../views/article/Article";
 
 Vue.use(VueRouter)
 
@@ -12,12 +13,16 @@ const routes = [
     children:[
       {
         path:'/',
-        component:Index
+        component:Home
+      },
+      {
+        path: '/article/:id',
+        component: Article,
+        props:true
       }
     ]
   }
 ]
-
 const router = new VueRouter({
   routes
 })

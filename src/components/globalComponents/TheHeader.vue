@@ -1,0 +1,244 @@
+<template>
+  <div class="header bg-white mb-3">
+    <div class="header-banner bg-pink">
+      <ul class="header-banner-menu flex jc-s ai-c text-white">
+        <li class="header-banner-item">公告</li>
+        <li class="header-banner-item"><i class="iconfont icon-huiyuan"></i>会员</li>
+        <li class="header-banner-item">永久地址</li>
+        <li class="header-banner-item"><i class="iconfont icon-qiandao"></i>签到</li>
+        <li class="header-banner-item">红包</li>
+      </ul>
+    </div>
+    <div class="header-nav">
+      <div class="header-nav-wrapper flex ai-c">
+        <router-link tag="a" to="/" class="header-nav-logo">
+            <img src="../../assets/imgs/logo.png">
+        </router-link>
+        <ul class="header-nav-menu flex flex-1 ai-c text-black ml-5">
+          <li class="header-nav-item">小姐姐</li>
+          <li class="header-nav-item">好文章</li>
+          <li class="header-nav-item">玩什么</li>
+          <li class="header-nav-item">值得看</li>
+        </ul>
+        <div v-if="1" class="header-nav-avatar">
+          <img src="../../assets/imgs/defultAvatar.png" ref="img" @click="popUserNavOpened">
+          <transition name="fade">
+            <div ref="popUserNav" name="fade" tag="div" v-show="popUserNav" class="popUserNav flex fd-c card bg-white text-blackOpacity">
+              <div class="private py-3 px-3 borderBottom">
+                <div class="userInfo flex fd-c ml-3">
+                  <b>lh207155</b>
+                  <span class="text-grey2 mt-2">个人中心</span>
+                </div>
+              </div>
+              <div class="post px-3 py-3 flex">
+                <i class="iconfont icon-xie text-blue"></i>
+                <div class="flex fd-c ml-2">
+                  <span>投稿</span>
+                  <span class="text-grey2 mt-2">向站点投稿</span>
+                </div>
+              </div>
+              <div class="exit px-3 py-3 flex">
+                <i class="iconfont icon-exit text-blue"></i>
+                <div class="flex fd-c ml-2">
+                  <span>退出</span>
+                  <span class="text-grey2 mt-2">退出登录</span>
+                </div>
+              </div>
+            </div>
+          </transition>
+          
+        </div>
+        <div v-else class="noLogin">
+          <button class="loginBtn btn bg-white text-blue mr-3 px-3" @click="toLogin">登录</button>
+          <button class="registerBtn btn bg-blue text-white px-3" @click="toReg">快速注册</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "FHeader",
+    data(){
+      return {
+        popUserNav:false
+      }
+    },
+    methods:{
+      toLogin(){
+        this.$store.commit('toLogin')
+      },
+      toReg(){
+        this.$store.commit('toReg')
+      },
+      popUserNavOpened(){
+        this.popUserNav=!this.popUserNav
+        document.addEventListener('click',(e)=>{
+          if(!this.$refs.popUserNav.contains(e.target)&&!this.$refs.img.contains(e.target)){
+            this.popUserNav=false
+          }
+        })
+      }
+    },
+    created() {
+    
+    }
+  }
+</script>
+
+<style scoped lang="scss">
+  @import "../../assets/scss/variables";
+  .header{
+    box-shadow: 0px 0.417rem 3.333rem 0px rgba(17, 58, 93, 0.1);
+    z-index: 100;
+    .header-banner{
+      height: 3.167rem;
+      width: 100vw;
+      background-image: url("../../assets/imgs/bg-top.png");
+      .header-banner-menu{
+        list-style: none;
+        width: 91.667rem;
+        max-width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        .header-banner-item{
+          cursor: pointer;
+          opacity: .8;
+          transition: opacity .3s ease-out;
+          margin-right: 1.167rem;
+          &:hover{
+            opacity: 1;
+          }
+        }
+      }
+    }
+    .header-nav{
+      height: 4.833rem;
+      width: 100vw;
+      .header-nav-wrapper{
+        width: 91.667rem;
+        height: 100%;
+        margin: 0 auto;
+        .header-nav-logo{
+          img{
+            height:4.833rem;
+          }
+        }
+        .header-nav-menu{
+          list-style: none;
+          .header-nav-item{
+            padding: 0 1.667rem;
+            line-height: 4.833rem;
+            font-size: 1.5rem;
+            height: 100%;
+            position: relative;
+            cursor: pointer;
+            &::after{
+              content: "";
+              width: 100%;
+              border-bottom: 0 solid rgba(255,255,255,0);
+              position: absolute;
+              bottom: -1px;
+              left: 0;
+              transition: all .1s ease-in;
+            }
+            &:hover{
+              color: map-get($colors,'blue');
+              transition: all .1s ease-out;
+              &::after{
+                content: "";
+                width: 100%;
+                border-bottom: 3px solid map-get($colors,'blue');
+                position: absolute;
+                bottom: -1px;
+                left: 0;
+                transition: all .1s ease-in;
+              }
+            }
+          }
+        }
+        .header-nav-avatar{
+          position: relative;
+          height: 3rem;
+          img{
+            height: 3rem; border-radius: 0.417rem;
+            cursor: pointer;
+          }
+          .fade-enter-active, .fade-leave-active {
+            transition: 0s max-height 0.15s linear,0.1s opacity cubic-bezier(0.39,0.575,0.565,1),0.15s transform cubic-bezier(0.1,1.26,0.83,1);
+          }
+          .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+            transform: scale(0.9);
+            opacity: 0;
+          }
+          .popUserNav{
+            transform-origin: center top;
+            border-radius: 0.333rem;
+            overflow: inherit;
+            box-shadow: 0 1rem 2rem rgba(73,80,87,0.3);
+            position: absolute;
+            width: 10rem;
+            top:4.25rem;
+            left: 0;
+            >div{
+              cursor: pointer;
+              &:hover {
+                background-color: map-get($colors, 'border');
+                border-radius: 0.333rem;
+              }
+            }
+            &::before{
+              content: '';
+              display: block;
+              position: absolute;
+              border-bottom: 0.5rem solid map-get($colors,'arrow');
+              border-left: 0.5rem solid transparent;
+              border-right: 0.5rem solid transparent;
+              border-top: 0.5rem solid transparent;
+              top:-1.333rem;
+              left: 0.667rem;
+            }
+          }
+        }
+
+       /* .noLogin{
+          .loginBtn{
+            cursor: pointer;
+            font-size: 1rem;
+            outline: none;
+            height: 2.333rem;
+            width: 4.333rem;
+            border-radius: 0.5rem;
+            border: 1px solid map-get($colors,'blue');
+            text-align: center;
+            line-height: 2.335rem;
+            box-sizing: border-box;
+            transition: all .2s;
+            &.loginBtn:hover{
+              background-color: map-get($colors,'blue');
+              color: map-get($colors,'white');
+            }
+          }
+          .registerBtn{
+            cursor: pointer;
+            font-size: 1rem;
+            outline: none;
+            height: 2.333rem;
+            width: 6.333rem;
+            border-radius: 0.5rem;
+            border: 1px solid map-get($colors,'blue');
+            text-align: center;
+            line-height: 2.333rem;
+            box-sizing: border-box;
+            transition: all .2s;
+            &.registerBtn:hover{
+              background-color: map-get($colors,'white');
+              color: map-get($colors,'blue');
+            }
+          }
+        }*/
+      }
+    }
+  }
+</style>

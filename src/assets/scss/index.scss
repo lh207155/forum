@@ -1,4 +1,8 @@
-@import url('//at.alicdn.com/t/font_1806248_bbkjqp5zfiw.css');
+@font-face {
+  font-family: 'pingfang 准';
+  src:url("../fonts/苹方黑体-准-简.ttf");
+}
+@import url('//at.alicdn.com/t/font_1806248_eh6v1nuv9ba.css');
 @import "variables";
 @each $typeKey,$typeVal in $spacing-types{
   @each $sizeKey,$sizeVal in $spacing-sizes{
@@ -31,12 +35,30 @@
 *{
   padding: 0;
   margin: 0;
-  font-family: font-regular,'Helvetica Neue',sans-serif;
 }
 html{
   font-size: 12px;
+  //font-family: 'pingfang 准';
+  -webkit-font-smoothing: antialiased;
+
 }
 .btn{
+  outline: none;
+  font-size: 1.2rem;
+  font-weight: normal;
+  border: 1px solid map-get($colors,'blue');
+  border-radius: 0.5rem;
+  height:2.833rem;
+  text-align: center;
+  line-height: 2.833rem;
+  cursor: pointer;
+  transition: opacity .3s;
+  vertical-align: bottom;
+  &:hover{
+    opacity: .8;
+  }
+}
+.btnLink{
   cursor: pointer;
 }
 .borderBottom{
@@ -65,7 +87,7 @@ html{
   //box-shadow: -1px 0 1px rgba(26,26,26,.1),1px 0 1px rgba(26,26,26,.1),0 1px 1px rgba(26,26,26,.1);
   box-shadow:0 1px 3px rgba(26,26,26,.1);
   border-radius: 0.667rem;
-  overflow: hidden;
+  //overflow: hidden;
 }
 .flex{
   display: flex;
@@ -83,14 +105,17 @@ html{
   justify-content: space-between;
 }
 .jc-s{
-  justify-content: start;
+  justify-content: flex-start;
 }
 .jc-e{
-  justify-content: end;
+  justify-content: flex-end;
 }
 .ai-c{
   align-items: center;
 }
 .flex-1{
   flex: 1;
+}
+.shrink0{
+  flex-shrink: 0;
 }
