@@ -4,10 +4,10 @@
 			<img src="../../assets/imgs/defultAvatar.png" alt="">
 		</div>
 		<div class="comment flex fd-c">
-			<textarea class="textArea p-3" v-model="model.comment"></textarea>
+			<textarea class="textArea p-3" v-model="comment"></textarea>
 			<div class="commentFuntion mt-3 flex">
 				<div class="emoji flex-1"></div>
-				<button class="btn px-3 bg-blue text-white">提交</button>
+				<button class="btn px-3 bg-blue text-white" @click="submit">提交</button>
 			</div>
 		</div>
 		<div></div>
@@ -17,11 +17,21 @@
 <script>
   export default {
     name: "PublishCard",
+		props:{
+      articleId:String
+		},
 		data(){
       return {
-        model:{
-          comment:''
-				}
+				comment:''
+			}
+		},
+		methods:{
+      async submit(){
+        await this.$http.post('/rest/comment',{
+          comment:this.comment,
+					articleId:this.articleId,
+		
+        })
 			}
 		}
   }

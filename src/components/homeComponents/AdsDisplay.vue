@@ -53,12 +53,12 @@
     methods:{
       async fetch(){
         const res = await this.$http.get('/rest/ad')
-        const resArr = res.data[0]
-        this.model.ads1=(await this.$http.get(`/rest/article/${resArr.ads1}`)).data
-        this.model.ads2=(await this.$http.get(`/rest/article/${resArr.ads2}`)).data
-        this.model.ads3=(await this.$http.get(`/rest/article/${resArr.ads3}`)).data
-        this.model.ad1=(await this.$http.get(`/rest/article/${resArr.ad1}`)).data
-        this.model.ad2=(await this.$http.get(`/rest/article/${resArr.ad2}`)).data
+        const resArr = res.data.model[0]
+        this.model.ads1=(await this.$http.get(`/rest/article/${resArr.ads1}`)).data.model
+        this.model.ads2=(await this.$http.get(`/rest/article/${resArr.ads2}`)).data.model
+        this.model.ads3=(await this.$http.get(`/rest/article/${resArr.ads3}`)).data.model
+        this.model.ad1=(await this.$http.get(`/rest/article/${resArr.ad1}`)).data.model
+        this.model.ad2=(await this.$http.get(`/rest/article/${resArr.ad2}`)).data.model
       }
     },
     created() {

@@ -1,6 +1,29 @@
 <template>
 	<div class="userInfoCard card flex fd-c p-3 bg-white">
-		<div v-if="0">
+		<div v-if="userInfo">
+			<div class="userInfo borderBottom flex pb-3">
+				<div class="avatar">
+					<img :src="userInfo.avatar" alt="">
+				</div>
+				<div class="user flex fd-c ml-4 jc-e">
+					<span class="name">{{userInfo.username}}</span>
+					<span class="title">
+						斗之气<i></i>
+					</span>
+				</div>
+			</div>
+			<div class="userCommunication borderBottom flex mt-3 pb-3">
+				<div class="flex-1"><p>文章</p><span>{{userInfo.articles.length||0}}</span></div>
+				<div class="flex-1"><p>评论</p><span>{{userInfo.comments.length||0}}</span></div>
+				<div class="flex-1"><p>关注</p><span>0</span></div>
+				<div class="flex-1"><p>粉丝</p><span>0</span></div>
+			</div>
+			<div class="points bg-purple text-blackOpacity mt-3 py-2 px-3">
+				<i class="iconfont icon-jifen"></i>{{userInfo.points}}
+			</div>
+		
+		</div>
+		<div v-else>
 			<p class="title text-grey2">嗨! 朋友</p>
 			<p class="slogan flex-1 mt-3 text-blackOpacity">所有的伟大都源于一个勇敢的开始！</p>
 			<div class="mt-4">
@@ -9,35 +32,17 @@
 				</button>
 			</div>
 		</div>
-		<div v-else>
-			<div class="userInfo borderBottom flex pb-3">
-				<div class="avatar">
-					<img src="../../assets/imgs/defultAvatar.png" alt="">
-				</div>
-				<div class="user flex fd-c ml-4 jc-e">
-					<span class="name">lh207155</span>
-					<span class="title">
-						斗之气<i></i>
-					</span>
-				</div>
-			</div>
-			<div class="userCommunication borderBottom flex mt-3 pb-3">
-				<div class="flex-1"><p>文章</p><span>0</span></div>
-				<div class="flex-1"><p>评论</p><span>0</span></div>
-				<div class="flex-1"><p>关注</p><span>0</span></div>
-				<div class="flex-1"><p>粉丝</p><span>0</span></div>
-			</div>
-			<div class="points bg-purple text-blackOpacity mt-3 py-2 px-3">
-				<i class="iconfont icon-jifen"></i>9
-			</div>
-	
-		</div>
 	</div>
 </template>
 
 <script>
   export default {
-    name: "UserInfoCard"
+    name: "UserInfoCard",
+		computed:{
+      userInfo(){
+        return this.$store.state.user
+      }
+		}
   }
 </script>
 

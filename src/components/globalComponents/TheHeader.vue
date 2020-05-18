@@ -20,13 +20,13 @@
           <li class="header-nav-item">玩什么</li>
           <li class="header-nav-item">值得看</li>
         </ul>
-        <div v-if="1" class="header-nav-avatar">
-          <img src="../../assets/imgs/defultAvatar.png" ref="img" @click="popUserNavOpened">
+        <div v-if="userInfo" class="header-nav-avatar">
+          <img :src="userInfo.avatar" ref="img" @click="popUserNavOpened">
           <transition name="fade">
             <div ref="popUserNav" name="fade" tag="div" v-show="popUserNav" class="popUserNav flex fd-c card bg-white text-blackOpacity">
-              <div class="private py-3 px-3 borderBottom">
-                <div class="userInfo flex fd-c ml-3">
-                  <b>lh207155</b>
+              <div class="private py-3 px-3 borderBottom" @click="toProfile">
+                <div class="userInfo flex fd-c" style="text-align: center">
+                  <span>{{userInfo.username}}</span>
                   <span class="text-grey2 mt-2">个人中心</span>
                 </div>
               </div>
@@ -37,7 +37,7 @@
                   <span class="text-grey2 mt-2">向站点投稿</span>
                 </div>
               </div>
-              <div class="exit px-3 py-3 flex">
+              <div class="exit px-3 py-3 flex" @click="exit">
                 <i class="iconfont icon-exit text-blue"></i>
                 <div class="flex fd-c ml-2">
                   <span>退出</span>
@@ -66,19 +66,48 @@
       }
     },
     methods:{
+      // 点击注册
       toLogin(){
         this.$store.commit('toLogin')
       },
+      // 点击登录
       toReg(){
         this.$store.commit('toReg')
       },
-      popUserNavOpened(){
-        this.popUserNav=!this.popUserNav
-        document.addEventListener('click',(e)=>{
+      // 个人信息导航卡点击事件处理函数
+      clickEventHandler(e){
+        //通过ref获取到DOM，contains函数判断是否包含触发点击事件的DOM
           if(!this.$refs.popUserNav.contains(e.target)&&!this.$refs.img.contains(e.target)){
+            //关闭卡片
             this.popUserNav=false
           }
-        })
+      },
+      //打开个人信息导航卡，并监听点击事件
+      popUserNavOpened(){
+        this.popUserNav=!this.popUserNav
+        document.addEventListener('click',this.clickEventHandler,false)
+        
+      },
+      toProfile(){
+        document.removeEventListener('click',this.clickEventHandler,false)
+        this.popUserNav=false
+        this.$router.push('/profile')
+      },
+      //退出登录
+      exit(){
+        //移除点击事件
+        document.removeEventListener('click',this.clickEventHandler,false)
+        this.popUserNav=false
+        //设置vuex状态
+        this.$store.commit('exit')
+        //重载页面，让路由守卫判断是否需要登录
+        location.reload()
+      }
+    },
+    computed:{
+      //获取store中的用户信息
+      userInfo(){
+        return this.$store.state.user
       }
     },
     created() {

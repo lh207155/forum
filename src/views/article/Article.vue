@@ -3,14 +3,14 @@
 		<ArticleBody class="mt-3" :model="model"></ArticleBody>
 		<ArticleRecommend class="mt-3" :randomArticles="randomArticles"></ArticleRecommend>
 		<ArticleComments class="mt-3" :comments="comments"></ArticleComments>
-		<PublishCard></PublishCard>
+		<PublishCard :id="model._id"></PublishCard>
 	</div>
 </template>
 
 <script>
-  import ArticleBody from "../../components/ArticleComponents/ArticleBody";
-  import ArticleRecommend from "../../components/ArticleComponents/ArticleRecommend";
-  import ArticleComments from "../../components/ArticleComponents/ArticleComments";
+  import ArticleBody from "../../components/articleComponents/ArticleBody";
+  import ArticleRecommend from "../../components/articleComponents/ArticleRecommend";
+  import ArticleComments from "../../components/articleComponents/ArticleComments";
   import PublishCard from "../../components/commonComponents/PublishCard";
   export default {
     name: "Article",
@@ -31,12 +31,12 @@
 				const res2 = await this.$http.get('/rest/article')
 				let randomSet = new Set()
         while(randomSet.size<2){
-					randomSet = randomSet.add(Math.floor(Math.random()*(res2.data.length-1)))
+					randomSet = randomSet.add(Math.floor(Math.random()*(res2.data.model.length-1)))
         }
 				randomSet.forEach(r=>{
-          this.randomArticles.push((res2.data)[r])
+          this.randomArticles.push((res2.data.model)[r])
 				})
-				this.model = res.data
+				this.model = res.data.model
         this.model.date = this.dateHandle(this.model.date)
 
 			}

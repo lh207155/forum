@@ -1,7 +1,7 @@
 <template>
 	<div class="contentBack bg-grey">
 		<TheHeader class="header-fixed" :class="{hiddenBanner:hiddenBanner}"></TheHeader>
-		<router-view></router-view>
+		<router-view class="forFooterPadding"></router-view>
 		<TheFooter></TheFooter>
 		<TheRegisterLoginCard></TheRegisterLoginCard>
 	</div>
@@ -45,6 +45,7 @@
 	.contentBack{
 		background-image: url("../assets/imgs/site-bg.png");
 		position: relative;
+		min-height: 100vh;
 		.header-fixed{
 			position: sticky;
 			top:0;
@@ -53,6 +54,9 @@
 			&.hiddenBanner{
 				transform: translate(0,-38px);
 			}
+		}
+		.forFooterPadding{
+			padding-bottom: 6rem;
 		}
 	}
 </style>

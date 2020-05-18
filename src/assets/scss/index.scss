@@ -1,8 +1,4 @@
-@font-face {
-  font-family: 'pingfang 准';
-  src:url("../fonts/苹方黑体-准-简.ttf");
-}
-@import url('//at.alicdn.com/t/font_1806248_eh6v1nuv9ba.css');
+@import url('//at.alicdn.com/t/font_1806248_cjncm22inbw.css');
 @import "variables";
 @each $typeKey,$typeVal in $spacing-types{
   @each $sizeKey,$sizeVal in $spacing-sizes{

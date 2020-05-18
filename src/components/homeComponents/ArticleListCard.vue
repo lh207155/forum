@@ -30,7 +30,7 @@
 		methods:{
       async fetch(){
         const res = await this.$http.get('/rest/article')
-				this.model = res.data
+				this.model = res.data.model
 				// 计算时间差
 				this.model.forEach(item=>{
           const timeDiff = (new Date()).getTime() - (new Date(item.date)).getTime()
