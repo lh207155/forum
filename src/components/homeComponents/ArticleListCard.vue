@@ -11,7 +11,7 @@
 					<div class="publishedInfo flex">
 						<span class="mr-3">发表于：{{item.date}}</span>
 						<p class="flex-1"><span>最后更新：{{item.date}}</span></p>
-						<span class="mr-3"><i class="iconfont icon-review" style="font-size: 0.5rem"></i> {{item.reviews.length}}</span>
+						<span class="mr-3"><i class="iconfont icon-review" style="font-size: 0.5rem"></i> {{item.comments.length}}</span>
 						<span><i class="iconfont icon-review1" style="font-size: 0.333rem"></i> {{item.reads.length}}</span>
 					</div>
 				</div>

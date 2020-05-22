@@ -11,21 +11,22 @@
     </div>
     <div class="header-nav">
       <div class="header-nav-wrapper flex ai-c">
-        <router-link tag="a" to="/" class="header-nav-logo">
+        <router-link to="/" class="header-nav-logo">
             <img src="../../assets/imgs/logo.png">
         </router-link>
-        <ul class="header-nav-menu flex flex-1 ai-c text-black ml-5">
-          <li class="header-nav-item">小姐姐</li>
-          <li class="header-nav-item">好文章</li>
-          <li class="header-nav-item">玩什么</li>
-          <li class="header-nav-item">值得看</li>
+        <ul class="header-nav-menu flex flex-1 ai-c text-purple3 ml-5">
+          <router-link tag="li" to="/girls" class="header-nav-item" :class="{active:$route.path==='/girls'}">小姐姐</router-link>
+          <router-link tag="li" to="/essays" class="header-nav-item" :class="{active:$route.path==='/essays'}">文章</router-link>
+          <router-link tag="li" to="/games" class="header-nav-item" :class="{active:$route.path==='/games'}">玩什么</router-link>
+          <router-link tag="li" to="/videos" class="header-nav-item" :class="{active:$route.path==='/videos'}">我要看</router-link>
         </ul>
         <div v-if="userInfo" class="header-nav-avatar">
           <img :src="userInfo.avatar" ref="img" @click="popUserNavOpened">
           <transition name="fade">
             <div ref="popUserNav" name="fade" tag="div" v-show="popUserNav" class="popUserNav flex fd-c card bg-white text-blackOpacity">
-              <div class="private py-3 px-3 borderBottom" @click="toProfile">
-                <div class="userInfo flex fd-c" style="text-align: center">
+              <div class="private py-3 px-3 borderBottom flex" @click="toProfile">
+                <i class="iconfont icon-profile1 text-blue"></i>
+                <div class="userInfo flex fd-c ml-2">
                   <span>{{userInfo.username}}</span>
                   <span class="text-grey2 mt-2">个人中心</span>
                 </div>
@@ -91,7 +92,7 @@
       toProfile(){
         document.removeEventListener('click',this.clickEventHandler,false)
         this.popUserNav=false
-        this.$router.push('/profile')
+        this.$router.push('/profile/overview')
       },
       //退出登录
       exit(){
@@ -172,7 +173,7 @@
               left: 0;
               transition: all .1s ease-in;
             }
-            &:hover{
+            &:hover,&.active{
               color: map-get($colors,'blue');
               transition: all .1s ease-out;
               &::after{
@@ -191,8 +192,11 @@
           position: relative;
           height: 3rem;
           img{
-            height: 3rem; border-radius: 0.417rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.417rem;
             cursor: pointer;
+            object-fit: cover;
           }
           .fade-enter-active, .fade-leave-active {
             transition: 0s max-height 0.15s linear,0.1s opacity cubic-bezier(0.39,0.575,0.565,1),0.15s transform cubic-bezier(0.1,1.26,0.83,1);
@@ -207,7 +211,7 @@
             overflow: inherit;
             box-shadow: 0 1rem 2rem rgba(73,80,87,0.3);
             position: absolute;
-            width: 10rem;
+            width: 12rem;
             top:4.25rem;
             left: 0;
             >div{

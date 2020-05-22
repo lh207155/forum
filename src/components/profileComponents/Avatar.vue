@@ -1,5 +1,5 @@
 <template>
-	<div class="header flex bg-white card p-4">
+	<div class="header flex bg-white p-4">
 		<div class="avatar">
 			<img :src="userInfo.avatar" alt="">
 			<label for="file" class="upload flex fd-c jc-c ai-c text-whiteOpacity">
@@ -10,12 +10,12 @@
 		</div>
 		<div class="info ml-4 flex fd-c jc-e">
 			<div class="infoItem">
-				<b class="mr-5">lh207155</b>
-				<span class="text-summary">1</span>
+				<b class="mr-4 text-purple2">{{userInfo.username}}</b>
+				<span class="title text-white bg-pink px-1">{{`Lv.${userInfo.level}`}}</span>
 			</div>
 			<div class="intro mt-4">
-				<span class="tag bg-border p-1 mr-3">一句话介绍自己</span>
-				<span class="introduction text-blackOpacity">我是小可爱</span>
+				<span class="tag bg-border p-1 mr-3 px-2">说说自己</span>
+				<span class="introduction text-titleMark">我是小可爱</span>
 			</div>
 		</div>
 	</div>
@@ -47,8 +47,23 @@
 
 <style scoped lang="scss">
 	.header{
+		position: relative;
 		width: 100%;
 		box-sizing: border-box;
+		z-index: 1;
+		overflow:hidden;
+		border-radius: 0.5rem;
+		&::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image: url("../../assets/imgs/profile2.jpg");
+			filter: blur(10px);
+			z-index: -1;
+		}
 		.avatar{
 			position: relative;
 			height: 10rem;
@@ -69,6 +84,7 @@
 				height: 100%;
 				width: 100%;
 				object-fit: cover;
+				border-radius: 0.5rem;
 			}
 		}
 		.info{
@@ -78,9 +94,13 @@
 				}
 			}
 			.intro{
+				.tag{
+					border-radius: 0.333rem;
+				}
 				.introduction{
-					font-size: 1.5rem;
-					font-weight: 600;
+					font-size: 1.2rem;
+					/*font-weight: 600;*/
+					
 				}
 			}
 			

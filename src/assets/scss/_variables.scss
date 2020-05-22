@@ -8,10 +8,19 @@ $colors:(
   'pink':#F0B0EE,
   'green':#00FF00,
   'red':red,
+  'red2':#D24161,
+  'purple2':#cca4e3,
+  'pink2':#ff0097,
+  'purple3':#725e82,
+  'blue2':#00a0e9,
   'purple':#f2f3ff,
+  'grey3':#999,
+  'grey4':#ccc,
+  'grey5':#f4f5f6,
   'footer':#000,
   'summary':#bbb,
   'border':#f3f3f3,
+  'topBorder':#fafafa,
   'publishText':#c1c1c1,
   'publishBg':#f7f7f7,
   'closeBtn':#b2bac2,
@@ -22,7 +31,9 @@ $colors:(
   'points':rgba(253, 98, 98, 0.07058823529411765),
   'titleMark':rgb(96, 125, 139),
   'blackOpacity':rgba(0,0,0,.8),
-  'whiteOpacity':rgba(255,255,255,.8)
+  'blackOpacity2':rgba(0,0,0,.4),
+  'whiteOpacity':rgba(255,255,255,.8),
+  'whiteOpacity2':rgba(245,245,245,.5)
 );
 $spacing-types: (
   m: margin,

@@ -27,26 +27,26 @@
         Items:[
           {
 						avatar:'../assets/imgs/defultAvatar.png',
-						username:'dsa',
-						date:'2019',
+						username:'USER1',
+						date:'2020',
 						money:8
 					},
           {
 						avatar:'../assets/imgs/defultAvatar.png',
-						username:'dsa',
-						date:'2019',
+						username:'USER2',
+						date:'2020',
 						money:8
 					},
           {
 						avatar:'../assets/imgs/defultAvatar.png',
-						username:'dsa',
-						date:'2019',
+						username:'USER3',
+						date:'2020',
 						money:8
 					},
           {
 						avatar:'../assets/imgs/defultAvatar.png',
-						username:'dsa',
-						date:'2019',
+						username:'USER4',
+						date:'2020',
 						money:8
 					},
 				]

@@ -2,10 +2,10 @@
 	<div class="randomArticle">
 		<div class="articleItem borderBottom p-3 flex ai-c" v-for="i in 3" :key="i">
 			<div class="articleImg">
-				<img src="../../assets/imgs/007I6HASly1gej3fgzlljj30ie0c9tah.jpg" alt="">
+				<img src="../../assets/imgs/73401818_2120780644884722_3255013328003230127_n.jpg" alt="">
 			</div>
 			<div class="articleInfo ml-3 flex fd-c jc-sb">
-				<p class="title text-blackOpacity">支持使用的加速器集</p>
+				<p class="title text-blackOpacity">内容正在建设中...</p>
 				<p class="date text-publishText mt-2">2020-05-10</p>
 			</div>
 		

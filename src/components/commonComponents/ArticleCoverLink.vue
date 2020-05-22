@@ -1,15 +1,19 @@
 <template>
-	<router-link v-if="Object.keys(ad).length" tag="div" :to="`/article/${ad._id}`" class="adItem">
+	<router-link v-if="ad&&ad.author&&ad.category" tag="div" :to="`/article/${ad._id}`" class="adItem">
 		<img class="image" :src="ad.cover">
-		<div class="adsInfo flex fd-c p-4">
-			<span class="text-white cate mt-3 text-whiteOpacity">
+		<div v-if="cate" class="articleInfo flex px-4 py-2 bg-blackOpacity2">
+			<span class="mr-3 text-white bg-whiteOpacity2 px-1"><i class="iconfont icon-review" style="font-size: 0.333rem"></i> {{ad.comments.length}}</span>
+			<span class="text-white bg-whiteOpacity2 px-1"><i class="iconfont icon-review1 text-white" style="font-size: 0.333rem"></i> {{ad.reads.length}}</span>
+		</div>
+		<div v-if="!cate" class="adsInfo flex fd-c p-4">
+			<span class="cate mt-3 text-whiteOpacity">
 				<b class="mr-2"></b>{{ad.category.name}}</span>
 			<span v-if="swiper" class="swiperTitle mt-3 text-whiteOpacity">{{ad.title}}</span>
 			<span v-else class="staticTitle mt-3 text-whiteOpacity">{{ad.title}}</span>
-			<span class="author mt-3">
+			<span v-if="0" class="author mt-3">
 				<img class="authorAvatar mr-2" :src="ad.author.avatar" alt="">
 				<span class="mr-2 text-whiteOpacity">{{ad.author.username}}</span>
-				<span class="text-whiteOpacity">2020-05-10</span>
+				<span class="text-whiteOpacity">{{(new Date(ad.date)).format('yyyy-MM-dd')}}</span>
 			</span>
 		</div>
 		<slot></slot>
@@ -19,8 +23,10 @@
 <script>
   export default {
     props:{
+      displayType:String,
       swiper:Boolean,
-			ad: Object
+			cate:Boolean,
+			ad: {Type:Object,default:''}
 		},
 		data(){
       return {
@@ -41,11 +47,25 @@
 		width: 100%;
 		height: 100%;
 		cursor: pointer;
+		&:hover .articleInfo{
+			transform: translateY(-27px);
+		}
 		.image {
 		/*border-radius: 0.667rem;*/
 		object-fit: cover;
 		width: 100%;
 		height: 100%;
+		}
+		.articleInfo{
+			position: absolute;
+			box-sizing: border-box;
+			bottom: -2.25rem;
+			left: 0rem;
+			width: 100%;
+			transition: all .3s;
+			span{
+				border-radius: 0.167rem;
+			}
 		}
 		.adsInfo {
 			z-index: 1;
@@ -62,7 +82,7 @@
 			.cate{
 				b{
 						display: inline-block;
-						border-left: 0.4rem solid grey;
+						border-left: 0.4rem solid map-get($colors,'white');
 						height: .8rem
 				}
 			}
@@ -70,7 +90,7 @@
 				font-size: 1.833rem;
 			}
 			.staticTitle{
-				font-size: 1rem;
+				font-size: 1.2rem;
 			}
 			.author{
 				.authorAvatar{

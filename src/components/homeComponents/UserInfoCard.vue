@@ -6,10 +6,8 @@
 					<img :src="userInfo.avatar" alt="">
 				</div>
 				<div class="user flex fd-c ml-4 jc-e">
-					<span class="name">{{userInfo.username}}</span>
-					<span class="title">
-						斗之气<i></i>
-					</span>
+					<span class="name mb-2 text-purple2">{{userInfo.username}}</span>
+					<span class="title text-white bg-pink px-1">{{`Lv.${userInfo.level}`}}</span>
 				</div>
 			</div>
 			<div class="userCommunication borderBottom flex mt-3 pb-3">
@@ -60,12 +58,16 @@
 				img{
 					width: 100%;
 					height: 100%;
+					object-fit: cover;
+					border-radius: 0.333rem;
 				}
 			}
 			.user{
 				height: 100%;
-				span{
-					display: inline-block;
+				.title{
+					text-align: center;
+					width: 3rem;
+					border-radius: 0.333rem;
 				}
 			}
 		}

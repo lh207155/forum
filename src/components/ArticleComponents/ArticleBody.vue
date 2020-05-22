@@ -3,16 +3,16 @@
 		<p class="cate"><b class="mr-2"></b>{{model.category.name}}</p>
 		<h1 class="title text-blackOpacity my-4 text-blackOpacity">{{model.title}}</h1>
 		<p class="publishedInfo">
-			<span class="mr-3">发表于：{{model.date}}</span>
+			<span class="mr-3">发表于：{{new Date(model.date).format('yyyy-MM-dd hh:mm:ss')}}</span>
 			<span><i class="iconfont icon-review1" style="font-size: 0.333rem"></i> {{model.reads.length}}</span>
 		</p>
 		<div class="authorInfo flex px-4 py-3 ai-c">
 			<div class="avatar">
-				<img src="../../assets/imgs/defultAvatar.png" alt="">
+				<img :src="model.author.avatar" alt="">
 			</div>
 			<div class="name flex fd-c ml-2 jc-sb flex-1">
 				<b class="text-blackOpacity">{{model.author.username}}</b>
-				<span class="text-blackOpacity">管理员</span>
+				<span v-if="1" class="flex-1 text-blue2 mt-2"><i class="admin userType admin">M</i></span>
 			</div>
 			<div class="followBtn">
 				<button class="button text-white bg-blue btn px-3">
@@ -21,7 +21,7 @@
 			</div>
 			<div class="contact">
 				<button class="button text-blue bg-white btn px-3 ml-3">
-					<i class="iconfont icon-letter mr-1"></i>私信
+					<i class="iconfont icon-write mr-1"></i>私信
 				</button>
 			</div>
 		</div>
@@ -38,8 +38,9 @@
 				<span><i class="iconfont icon-we-chat p-2"></i></span>
 				<span><i class="iconfont icon-q_zone p-2"></i></span>
 			</div>
-			<div class="collect mb-5">
-				<i class="iconfont icon-xiai-1"></i> 收藏
+			<div class="collect mb-5" @click="collection">
+				<i class="iconfont mr-2" :class="{'icon-haventCollect':!collectionState,'icon-hasCollected':collectionState}"></i>
+				<span class="text-purple3">{{collectionState?'已收藏':'收藏'}}</span>
 			</div>
 		</div>
 		<!--			<div class="tags mt-5">-->
@@ -52,9 +53,30 @@
 <script>
   export default {
     name: "ArticleBody",
+		data(){
+      return {
+        collectionState:0
+			}
+		},
 		props:{
       model:Object
-		}
+		},
+		methods:{
+      //点击收藏按钮
+      async collection(){
+        if(!this.collectionState){
+          await this.$http.put(`/rest/article/collection/${this.model._id}`)
+          this.collectionState = !this.collectionState
+				}else {
+          await this.$http.put(`/rest/article/unCollection/${this.model._id}`)
+          this.collectionState = !this.collectionState
+				}
+			}
+		},
+		created() {
+      // 页面初始化时，判断该文章是否已被当前用户收藏
+      this.collectionState = this.$store.state.user.collections.some(id=>id===this.model._id)
+    }
   }
 </script>
 <style lang="scss">
@@ -112,8 +134,19 @@
 				color:#262626;
 				margin: 2.5rem 0;
 			}
+			iframe{
+				width: 100%;
+				height: 38.583rem;
+			}
 			img{
 				margin: 1rem 0;
+			}
+			pre{
+				font-size: 1.5rem;
+				font-family: inherit;
+				background-color: #bcbcbc;
+				padding: 1rem;
+				border-radius: 4px;
 			}
 			strong{
 				vertical-align: baseline;
@@ -150,11 +183,19 @@
 				}
 			}
 			.collect{
-				font-size: 1.35rem;
+				height: 2.167rem;
+				line-height: 2.167rem;
+				cursor: pointer;
 				i{
-					font-size: 1.8rem;
+					font-size: 1.5rem;
+					color: gold;
 				}
-				
+				span{
+					text-align: center;
+					display: inline-block;
+					width: 4rem;
+					font-size: 1.2rem;
+				}
 			}
 		}
 	}

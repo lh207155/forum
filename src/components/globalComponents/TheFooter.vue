@@ -1,7 +1,7 @@
 <template>
 		<div class="footer flex jc-sa ai-c bg-footer text-white mt-3">
-			<div>Copyright © 2020 好人卡</div>
-			<div>永久地址：https://www.hrka.cc</div>
+			<div>Copyright © 2020 玉簟秋</div>
+			<div>永久地址：https://www.haogege.com</div>
 		</div>
 </template>
 

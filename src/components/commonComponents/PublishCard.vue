@@ -1,9 +1,9 @@
 <template>
 	<div class="p-4 flex borderBottom card bg-white publishCard mt-3">
 		<div class="avatar mr-4">
-			<img src="../../assets/imgs/defultAvatar.png" alt="">
+			<img :src="$store.state.user.avatar" alt="">
 		</div>
-		<div class="comment flex fd-c">
+		<div class="comment flex fd-c" ref="submit">
 			<textarea class="textArea p-3" v-model="comment"></textarea>
 			<div class="commentFuntion mt-3 flex">
 				<div class="emoji flex-1"></div>
@@ -18,7 +18,7 @@
   export default {
     name: "PublishCard",
 		props:{
-      articleId:String
+      id:String
 		},
 		data(){
       return {
@@ -27,11 +27,22 @@
 		},
 		methods:{
       async submit(){
-        await this.$http.post('/rest/comment',{
-          comment:this.comment,
-					articleId:this.articleId,
-		
-        })
+        try{
+          await this.$http.post('/rest/comment',{
+            comment:this.comment,
+            articleId:this.id,
+
+          })
+          //广播事件，并传入一个当前页面距离底部的距离，在dom更新后保持页面距离底部的距离不变
+          const fixedHeight = document.body.clientHeight-window.pageYOffset
+          this.$emit('update',fixedHeight)
+				}catch (e) {
+          console.log(e.response.status)
+          e.response.status === 401 ? this.$store.commit('toLogin'):false
+        }
+        
+				
+        
 			}
 		}
   }
@@ -46,6 +57,9 @@
 			width: 4rem;
 			img{
 				height: 4rem;
+				width: 4rem;
+				border-radius: 0.333rem;
+				object-fit: cover;
 			}
 		}
 		.comment{

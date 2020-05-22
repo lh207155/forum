@@ -1,54 +1,76 @@
 <template>
 	<transition name="fade">
+		<!--这里登录和注册共用一个页面，也绑定在同一个model上，展示和提交根据全局的vuex的isRegLogin返回的状态决定，1：登录，2：注册，0：表示关闭-->
 		<div v-if="isRegLogin" class="bgShadow flex jc-c ai-c">
-			<div class="fixedCard bg-white pb-4" :class="{'isReg':isRegLogin===2,'isLogin':isRegLogin===1}">
+			<div class="fixedCard bg-white pb-4" :class="{'isReg':isRegLogin===2,'isLogin':isRegLogin===1,'isForget':isRegLogin===3}">
 				<div class="logo flex fd-c jc-e ai-c pt-5">
 					<div class="closeBtn text-closeBtn btnLink" @click="closeCard">×</div>
 					<img src="../../assets/imgs/logo.png" alt="">
-					<span class="mt-3 text-summary">{{isRegLogin===1?'登录':'注册'}}</span>
+					<span class="mt-3 text-summary">{{isRegLogin===1?'登录':isRegLogin===2?'注册':'重置密码'}}</span>
 					<span class="goLogin" :class="messageColor" v-if="isRegLogin===1">{{message1}}</span>
 					<span class="goLogin" :class="messageColor" v-if="isRegLogin===2">{{message2}}</span>
+					<span class="goLogin" :class="messageColor" v-if="isRegLogin===3">{{message3}}</span>
 				</div>
-				<form class="flex fd-c ai-c mt-5" id="userForm" >
-					<label v-if="isRegLogin===2" class="inputItem">
-						<input type="text" class="inputBox p-3" v-model="model.username" @focusout="usernameVerify">
-						<p class="title"><span class="px-3 text-publishText">可爱的昵称</span></p>
-						<span class="des1 mt-2 text-red" v-text="verification.username"></span>
-						<span class="des2 mt-2 text-publishText">中文字母数字14位</span>
-					</label>
-					<label class="inputItem mt-4">
-						<input type="text" class="inputBox p-3" v-model="model.email" @focusout="emailVerify">
-						<p class="title"><span class="px-3 text-publishText">登录邮箱</span></p>
-						<span :class="{hidden:isRegLogin===1}" class="des1 mt-2 text-red"  v-text="verification.email"></span>
-						<span  v-if="isRegLogin===2" class="des2 mt-2 text-publishText">用作登录和验证</span>
-					</label>
-					<label v-if="isRegLogin===2" class="inputItem mt-4">
-						<input type="text" class="inputBox p-3" v-model="model.emailCode">
-						<p class="title"><span class="px-3 text-publishText">验证码</span></p>
-						<button class="inputBtn verify px-4" :class="{'text-grey2':sendCD}" :disabled="sendCD" @click="sendVerificationCode">{{'发送验证码'+restTime}}</button>
-						<span class="des1 mt-2 text-red"  v-text="verification.emailCode"></span>
-					</label>
-					<label class="inputItem mt-4">
-						<input :type="inputType" class="inputBox p-3" v-model="model.password" @focusout="passwordVerify">
-						<p class="title"><span class="px-3 text-publishText">密码</span></p>
-						<button class="inputBtn checkPass px-4" @click="togglePassBox"><i class="iconfont" :class="{'icon-checkPassOff':!checkPass,'icon-checkPassOn':checkPass}"></i></button>
-						<span :class="{hidden:isRegLogin===1}" class="des1 mt-2 text-red"  v-text="verification.password"></span>
-						<span v-if="isRegLogin===2" class="des2 mt-2 text-publishText">6到16位字符</span>
-					</label>
+				<form  id="userForm" >
+					<transition-group class="flex fd-c ai-c mt-5" name="list-move">
+						<label v-if="isRegLogin===2" class="inputItem" key="1">
+							<div>
+								<input type="text" class="inputBox p-3" v-model="model.username" @focusout="usernameVerify">
+								<p class="title"><span class="px-3 text-publishText">可爱的昵称</span></p>
+								<span class="des1 mt-2 pl-2" style="box-sizing: border-box" :class="verification.usernameColor" v-text="verification.username"></span>
+								<span class="des2 mt-2 text-publishText">中文字母数字14位</span>
+							</div>
+							
+						</label>
+						<label class="inputItem mt-4" key="3">
+							<div>
+								<input type="text" class="inputBox p-3" v-model="model.email" @focusout="emailVerify">
+								<p class="title"><span class="px-3 text-publishText">登录邮箱</span></p>
+								<span v-if="isRegLogin!=1" :class="verification.emailColor" class="des1 mt-2 pl-2" style="box-sizing: border-box" v-text="verification.email"></span>
+								<span  v-if="isRegLogin===2" class="des2 mt-2 text-publishText">用作登录和验证</span>
+							</div>
+							
+						</label>
+						
+					
+						
+						
+						<label v-if="isRegLogin===2||isRegLogin===3" class="inputItem mt-4" key="2">
+							<div>
+								<input type="text" class="inputBox p-3" v-model="model.emailCode">
+								<p class="title"><span class="px-3 text-publishText">验证码</span></p>
+								<div class="inputBtn verify px-4" :class="{'text-grey2':sendCD}" @click="sendVerificationCode">{{'发送验证码'+restTime}}</div>
+								<span class="des1 mt-2 pl-2" style="box-sizing: border-box" :class="verification.emailCodeColor" v-text="verification.emailCode"></span>
+							</div>
+							
+						</label>
+						<label class="inputItem mt-4" key="4">
+							<div>
+								<input :type="inputType" class="inputBox p-3" v-model="model.password" @focusout="passwordVerify">
+								<p class="title"><span class="px-3 text-publishText">{{isRegLogin===3?'重置密码':'密码'}}</span></p>
+								<div class="inputBtn checkPass px-4" @click="togglePassBox"><i class="iconfont" :class="{'icon-checkPassOff':!checkPass,'icon-checkPassOn':checkPass}"></i></div>
+								<span v-if="isRegLogin!=1" :class="verification.passwordColor" class="des1 mt-2 pl-2" style="box-sizing: border-box" v-text="verification.password"></span>
+								<span v-if="isRegLogin===2" class="des2 mt-2 text-publishText">6到16位字符</span>
+							</div>
+							
+						</label>
+					</transition-group>
+					<div class="cardFooter">
+						<p v-if="isRegLogin===2" class="mt-4">
+							<span>已有帐号？</span>
+							<span class="text-blue btnLink" @click="toLogin">登录</span>
+						</p>
+						<p v-else class="mt-4 flex px-4">
+							<span v-if="isRegLogin!=3" class="flex-1 text-blue btnLink pl-5" style="text-align: left" @click="toForget">忘记密码？</span>
+							<span v-if="isRegLogin===3" class="flex-1 text-blue btnLink pl-5" style="text-align: left" @click="toLogin">登录</span>
+							<span>新用户？</span>
+							<span class="text-blue btnLink pr-5" @click="toReg">注册</span>
+						</p>
+						<button v-if="isRegLogin===2" class="regBtn bg-blue text-white mt-4 btnLink" @click="register">快速注册</button>
+						<button v-if="isRegLogin===1" class="regBtn bg-blue text-white mt-4 btnLink" @click="login">快速登录</button>
+						<button v-if="isRegLogin===3" class="regBtn bg-blue text-white mt-4 btnLink" @click="updatePassword">重置密码</button>
+					</div>
 				</form>
-				<div class="cardFooter">
-					<p v-if="isRegLogin===2" class="mt-4">
-						<span>已有帐号？</span>
-						<span class="text-blue btnLink" @click="toLogin">登录</span>
-					</p>
-					<p v-else class="mt-4 flex px-4">
-						<span class="flex-1 text-blue btnLink" style="text-align: left">忘记密码？</span>
-						<span>新用户？</span>
-						<span class="text-blue btnLink" @click="toReg">注册</span>
-					</p>
-					<button v-if="isRegLogin===2" class="regBtn bg-blue text-white mt-4 btnLink" @click="register">快速注册</button>
-					<button v-else class="regBtn bg-blue text-white mt-4 btnLink" @click="login">快速登录</button>
-				</div>
 			</div>
 		</div>
 	</transition>
@@ -63,9 +85,11 @@
         checkPass:false,
 				//注册登录卡头部提示信息颜色
         messageColor:'',
-        //注册登录卡头部提示信息文本
+        //注册登录卡头部提示信息文本,
         message1:'',
         message2:'',
+        message3:'',
+				
 				//输入信息绑定
 				model:{
           username:'',
@@ -78,7 +102,12 @@
           username:'',
           email:'',
 					emailCode:'',
-					password:''
+					password:'',
+          //输入框验证提示颜色
+          usernameColor:'',
+          emailColor:'',
+          emailCodeColor:'',
+          passwordColor:'',
 				},
 				//发送验证码按钮倒计时和按钮禁用切换
 				restTime:'',
@@ -86,18 +115,33 @@
 			}
 		},
 		methods:{
+   
+			// 切换卡片的时候清除提示
+      clearTips(){
+				
+        Object.keys(this.verification).forEach(item=>{
+          this.verification[item] = ''
+        })
+      },
       // 打开登录卡
       toLogin(){
         this.$store.commit('toLogin')
 				//清空注册提示信息
         this.message2=''
+        this.clearTips()
       },
 			// 打开注册卡
       toReg(){
         this.$store.commit('toReg')
         //清空登录提示信息
         this.message1=''
+        this.clearTips()
       },
+			toForget(){
+        this.$store.commit('toForget')
+				this.message3=''
+        this.clearTips()
+			},
 			// 关闭
       closeCard(){
         this.$store.commit('closeLoginCard')
@@ -106,93 +150,74 @@
       togglePassBox(){
         this.checkPass = !this.checkPass
 			},
-			// 输入框有信息才验证，增加用户体验
       async usernameVerify() {
-        //登陆时无需验证
+        //屏蔽登录时的验证
         if(this.$store.state.loginCardState===1){
           return
         }
-    
-        //请求服务器验证昵称是否存在
-				//存在返回422，不存在返回200，
-				//接收到422，返回true，200返回false
-        const verify = async ()=>{
-          try{
-            await this.$http.get(`/rest/user/username/${this.model.username}`)
+        //1.判断有输入，为了提高用户体验，无输入就不验证，返回true
+				//2.判断通过正则，未通过返回false
+				//3.判断数据库没有重复，返回true，有重复发挥false
+        if(this.model.username){
+          if(this.usernameRegExp.test(this.model.username)){
+            // verify返回一个Promise，在此处捕获处理200和422
+            try{
+              const res = await this.verify('username')
+              this.verification.username = res.data.message
+              this.verification.usernameColor = 'text-pink'
+              return true
+            }catch (e) {
+              this.verification.username = e.response.data.message
+              this.verification.usernameColor = 'text-red'
+              return false
+            }
+            //这里一定要else，因为上面的if有异步，会先执行下面的
+						//如果先返回了false，后续处理会出错
+					}else{
+            this.verification.username = '格式有误'
+            this.verification.usernameColor = 'text-red'
             return false
-          }catch (e) {
-            return true
-          }
-        }
-        const regExp = /^[0-9a-zA-Z\u4e00-\u9fa5]{1,14}$/
-        // 首先判断有输入，并且未通过正则，显示提示信息，并返回false
-        if(!regExp.test(this.model.username)&&this.model.username){
-          this.verification.username='昵称格式错误'
-          return false
-          //否则如果 有输入也通过正则，请求服务器验证，验证存在返回true，显示提示信息，并返回false
-        }else if(this.model.username&&await verify()){
-          this.verification.username='昵称已经被别人用啦！'
-          return false
-          //否则 就是 无输入，或者有输入且验证用户不存在，不显示提示信息，并返回true
-        } else {
-          this.verification.username=''
+					}
+				}else{
+          this.verification.username = ''
           return true
         }
-				
-				// if(this.model.username){
-        //   if(regExp.test(this.model.username)){
-        //     const message =await verify()
-        //     if(message){
-        //       this.username.tips='昵称已被使用啦！'
-        //       this.username.switch=false
-				// 			return false
-				// 		}else{
-        //       this.username.tips=''
-        //       this.username.switch=true
-        //       return true
-				// 		}
-				// 	}else{
-        //     this.username.tips='昵称格式错误'
-        //     this.username.switch=false
-        //     return false
-				// 	}
-				// }
-				
-				
       },
       async emailVerify(){
-        //登陆时无需验证
-        if(this.$store.state.loginCardState===1){
+        //同用户名验证
+        if(this.$store.state.loginCardState===1||this.$store.state.loginCardState===3){
           return
         }
-        const regExp = /^[0-9a-zA-Z]+([.-_]*[0-9a-zA-Z]+)*@([0-9a-zA-Z]+[-_]*[0-9a-zA-Z]+.)+[0-9a-zA-Z]{2,6}$/
-				const verify = async ()=>{
-          try{
-            await this.$http.get(`/rest/user/email/${this.model.email}`)
-						return false
-          }catch (e) {
-						return true
-          }
+        if(this.model.email){
+          if(this.emailRegExp.test(this.model.email)){
+						try{
+              const res = await this.verify('email')
+              this.verification.email = res.data.message
+              this.verification.emailColor = 'text-pink'
+							return true
+						}catch (e) {
+              this.verification.email = e.response.data.message
+              this.verification.emailColor = 'text-red'
+              return false
+            }
+          }else{
+            this.verification.email = '格式有误'
+            this.verification.emailColor = 'text-red'
+            return false
+					}
+        }else{
+          this.verification.email = ''
+          return true
 				}
-        if(!regExp.test(this.model.email)&&this.model.email){
-          this.verification.email='不是邮箱'
-					return false
-        }else if(this.model.email&&await verify()){
-          this.verification.email='邮箱已被使用！'
-					return false
-				}else{
-          this.verification.email=''
-					return true
-        }
       },
       passwordVerify(){
         //登陆时无需验证
         if(this.$store.state.loginCardState===1){
           return
 				}
-        const regExp = /^[0-9a-zA-Z\w]{6,16}$/
-        if(!regExp.test(this.model.password)&&this.model.password){
+        if(!this.passwordRegExp.test(this.model.password)&&this.model.password){
           this.verification.password='密码格式错误'
+					this.verification.passwordColor = 'text-red'
 					return false
         }else{
           this.verification.password=''
@@ -200,28 +225,48 @@
         }
       },
       async sendVerificationCode(){
-        //发送之前先验证有输入，且通过邮箱验证（邮箱验证方法包含服务器验证）
-        if(await this.emailVerify()&&this.model.email) {
-          this.verification.emailCode=' '
-					//发送用户名和邮箱信息，
-          await this.$http.post('/emailCode', {email:this.model.email,username:this.model.username})
-					//设置按钮倒计时，防止多次点击发送
+        //发送验证码
+				const sendEmailCode = ()=> {
+          this.verification.emailCode='验证码已发送到您邮箱'
+          this.verification.emailCodeColor = 'text-pink'
           this.restTime = 60
-					//设置按钮禁用
-					this.sendCD = true
-					//开启定时器，倒计时，结束之后恢复按钮
-					const id = setInterval(()=>{
+          //设置按钮禁用
+          this.sendCD = true
+          //开启定时器，倒计时，结束之后恢复按钮
+          const id = setInterval(()=>{
             if(this.restTime===0){
               this.restTime=''
               this.sendCD = false
               clearInterval(id)
-						}else{
+            }else{
               this.restTime--
-						}
-					},1000)
+            }
+          },1000)
+        }
+        //检查按钮是否冷却中
+        if(this.sendCD){
+          return
+					
+        }	//忘记密码
+        else if(this.$store.state.loginCardState===3){
+          //判断通过正则，发送验证码
+          if(this.model.email&&this.emailRegExp.test(this.model.email)){
+            //带一个类型，服务器判断发送后发送对应的邮件
+            await this.$http.post('/emailCode', {email:this.model.email,type:'forgetting'})
+            sendEmailCode()
+					}else{
+            this.verification.emailCode='再检查一下您的邮箱'
+            this.verification.emailCodeColor = 'text-red'
+					}
+				}	//正常注册，这里正则和服务器查重已经在emailVerify里验证了
+        else if(await this.emailVerify()&&this.model.email){
+          //带一个类型，服务器判断发送后发送对应的邮件
+          await this.$http.post('/emailCode', {email:this.model.email,username:this.model.username,type:'registration'})
+          sendEmailCode()
         }else{
           //未通过验证，提示信息
           this.verification.emailCode='请输入正确的邮箱地址！'
+					this.verification.emailCodeColor = 'text-red'
 				}
 			},
 			// 注册
@@ -229,43 +274,46 @@
         //先判断需要的信息是否完备
 				if(!this.model.username){
           this.verification.username='用户名不能为空'
+          this.verification.usernameColor='text-red'
 					return
 				}
 				if(!this.model.email){
           this.verification.email='邮箱不能为空'
+          this.verification.emailColor='text-red'
 					return
 				}
 				if(!this.model.emailCode){
           this.verification.emailCode='验证码不能为空'
+          this.verification.emailCodeColor='text-red'
 					return
 				}
 				if(!this.model.password){
           this.verification.password='密码不能为空'
+          this.verification.passwordColor='text-red'
 					return
 				}
 				//再把所有输入信息统一判断
+				//这里在判断时已经将错误信息显示在了对应的地方，后面catch到的错误一般是验证码出错了
         if(await this.usernameVerify()&&await this.emailVerify()&&this.passwordVerify()){
           try {
             //尝试发送用户信息，在服务端查询验证码是否正确，或者用户是否重复
-            const res = await this.$http.post('/register',this.model)
-						//成功
+            const res = await this.$http.post('/registration',this.model)
+						//注册成功跳转到登录页面
             this.toLogin()
+						//并提示是否要登录
             this.message1 = res.data.message
             this.messageColor = 'text-pink'
           }catch (e) {
-            //失败,拿到错误信息
+            //失败,拿到错误信息，一般是验证码错误
             this.message2 = e.response.data.message
 						this.messageColor = 'text-red'
           }
-
-          // 注册成功
 				}
-    
-				
 			},
+			//登录
 			async login(){
         try {
-          // 尝试登录成功，vuex存入用户信息，关闭登录卡，将token写入localStorage
+          // 尝试登录，成功，vuex存入用户信息，关闭登录卡，将token写入localStorage
           const res = await this.$http.post('/login',this.model)
 					this.$store.commit('hasLogin',res.data.user)
 					this.$store.commit('closeLoginCard')
@@ -277,6 +325,27 @@
 					this.message1 = e.response.data.message
 					this.messageColor = 'text-red'
         }
+			},
+			//重置密码提交
+      async updatePassword(){
+        //判断信息完备
+        if(this.model.email&&this.model.emailCode&&this.model.password){
+          try{
+            const res = await this.$http.post('/forgetting',this.model)
+						//跳转到登录
+						this.toLogin()
+						this.message1 = res.data.message
+						this.messageColor = 'text-pink'
+          }catch (e) {
+            //一般是验证码邮箱对不上号，统一提示验证码错误
+            this.message3 = e.response.data.message
+            this.messageColor = 'text-red'
+          }
+				}else{
+          //少了信息
+          this.message3 = '您似乎忘了什么'
+          this.messageColor = 'text-red'
+				}
 			}
 		},
 		computed:{
@@ -319,6 +388,9 @@
 			/*	height: 33.75rem;*/
 			/*	animation: card2 .5s;*/
 			/*}*/
+			&.isForget{
+				height: 39.5rem;
+			}
 			.logo{
 				background-image: url("../../assets/imgs/model-bg.png");
 				background-size: 100%;
@@ -350,7 +422,19 @@
 			.inputItem{
 				width: 24rem;
 				height: 5.75rem;
-				position: relative;
+				/*position: relative;*/
+				transition: all .3s ;
+				/*&:last-of-type{*/
+				/*	position: absolute;*/
+				/*	bottom: 9.667rem;*/
+				/*}*/
+				/*&:nth-of-type(1){*/
+				/*	position: sticky;*/
+				/*	!*top:5rem*!*/
+				/*}*/
+				&>div{
+					position: relative;
+				}
 				.title{
 					position: absolute;
 					top:-0.708rem;
@@ -415,11 +499,15 @@
 					top: 0;
 					right: 0;
 					height: 4rem;
+					line-height: 4rem;
+					font-size: 1.1rem;
 					cursor: pointer;
 					background: rgba(255,255,255,0);
 				}
 			}
 			.cardFooter{
+				position: absolute;
+				bottom: 1.5rem;
 				width: 100%;
 				text-align: center;
 				p{
@@ -437,15 +525,20 @@
 			}
 		}
 	}
-	.fade-enter-active, .fade-leave-active {
+	.fade-enter-active,.fade-leave-active {
 		transition: all .3s;
 	}
-	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+	.fade-enter,.fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
 		transform: scale(1.2);
 		opacity: 0;
 	}
-	/*隐藏输入验证提示左边的提示信息*/
-	.hidden{
-		visibility: hidden;
+	.list-move-active-active,.list-move-leave-active{
+		transition: all .3s;
+	}
+	.list-move-enter,.list-move-leave-to /* .fade-leave-active below version 2.1.8 */ {
+		opacity: 0;
+	}
+	.list-move-leave-active{
+		position: absolute;
 	}
 </style>
