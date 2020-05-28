@@ -2,7 +2,8 @@ import axios from 'axios'
 import store from './store/index'
 const http = axios.create({
   // baseURL:'http://localhost:3000/web/api'
-  baseURL:'http://192.168.0.104:3000/web/api'
+  // baseURL:'http://192.168.0.104:3000/web/api'
+  baseURL: process.env.VUE_APP_API_URL || '/web/api'
 })
 http.interceptors.request.use((config)=>{
   // 每次请求接口的时候，有token就带上token，有的页面需要登录，但有的也不需要

@@ -1,4 +1,4 @@
-@import url('//at.alicdn.com/t/font_1806248_d5ah6q6tz7r.css');
+@import url('//at.alicdn.com/t/font_1806248_07wweyf1hik4.css');
 @import "variables";
 
 @font-face {
@@ -130,9 +130,25 @@ html{
 .ai-c{
   align-items: center;
 }
+.ai-str{
+  align-items: stretch;
+}
 .flex-1{
   flex: 1;
 }
-.shrink0{
-  flex-shrink: 0;
+.shrink-1{
+  flex-shrink: 1;
 }
+.flex-w{
+  flex-wrap: wrap;
+}
+.text-l{
+  text-align: left;
+}
+.text-r{
+  text-align: right;
+}
+.text-c{
+  text-align: center;
+}
+

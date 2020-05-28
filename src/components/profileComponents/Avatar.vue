@@ -15,7 +15,7 @@
 			</div>
 			<div class="intro mt-4">
 				<span class="tag bg-border p-1 mr-3 px-2">说说自己</span>
-				<span class="introduction text-titleMark">我是小可爱</span>
+				<span class="introduction text-titleMark">{{userInfo.introduction}}</span>
 			</div>
 		</div>
 	</div>

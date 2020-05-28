@@ -1,5 +1,11 @@
 <template>
-	<div>pub</div>
+	<div class="nav">
+		<div class="comment"></div>
+		<div class="article"></div>
+	</div>
+	<router-view>
+	
+	</router-view>
 </template>
 
 <script>

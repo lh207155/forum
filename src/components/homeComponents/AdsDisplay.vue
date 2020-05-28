@@ -1,7 +1,7 @@
 <template>
 	<div class="adsDisplay flex">
-		<div class="adsSwiperDisplay">
-			<swiper ref="mySwiper" :options="swiperOptions" class="swiper-wrapper">
+		<div class="adsSwiperDisplay" :options="swiperOptions">
+			<swiper ref="mySwiper1" :options="swiperOptions" class="swiper-wrapper">
 				<swiper-slide>
 					<ArticleCoverLink swiper :ad="model.ads1"></ArticleCoverLink>
 				</swiper-slide>
@@ -39,7 +39,7 @@
           // 分页器 元素选择器
           pagination: {
             el: '.swiper-pagination',
-          }
+          },
         },
         model: {
           ads1: {},
@@ -63,6 +63,9 @@
     },
     created() {
       this.fetch()
+    },
+		mounted() {
+      // console.log(this.$refs.mySwiper1)
     }
   }
 </script>
@@ -109,11 +112,18 @@
 			.ad1{
 				width: 100%;
 				/*这里不知道为什么非要一个不是100%的高度才可以适应*/
-				height: 1%;
+				/*后来知道了，因为：ad1,ad2是flex项目，设置了flex-grow：1，只在有剩余空间的时候才会分配剩余空间*/
+				/*而这里，因为里面的子元素img设置的是宽高100%，根据图片大小，它应该是超过了容器的宽高，但是，因为是垂直排列，宽度固定，所以图片按照宽度等比缩放高度*/
+				/*ad1，ad2，两个项目都被图片撑开高度，所以容器已经没有剩余空间可以分配了，所以整个被撑开，flex1就不起作用*/
+				/*而如果ad1，ad2都设置了一个不超过50%的任意高度，就会存在剩余空间，平均分配给两个项目*/
+				/*如果不给boxsizing设置borderbox的话，设置margin也不影响平均分配*/
+				height: 1px;
+
 			}
 			.ad2{
 				width: 100%;
-				height: 1%;
+				height: 1px;
+
 			}
 		}
 	}

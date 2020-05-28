@@ -22,6 +22,17 @@ Vue.mixin({
     }
   },
   methods: {
+    //返回顶部
+    toTop(){
+      const size = document.documentElement.scrollTop/50
+      const id = setInterval(()=>{
+        document.documentElement.scrollTop = document.documentElement.scrollTop -= size
+        if(document.documentElement.scrollTop<=0){
+          clearInterval(id)
+        }
+      },1)
+
+    },
     //时间格式处理，格式化为：**时间前
     dateHandle(date){
       const timeDiff = (new Date()).getTime() - (new Date(date)).getTime()
@@ -43,8 +54,9 @@ Vue.mixin({
     },
     // 查询用户表，检查用户名或者邮箱有没有重复 option：String=('username'/'email')
     // return Promise 交给后续处理
+    // 使用常规函数，这里this指的是TheRegisterLoginCard.vue组件里data的model
     async verify(option){
-      return await this.$http.get(`/rest/user/${option}/${this.model[option]}`)
+      return await this.$http.get(`/${option}/${this.model[option]}`)
     }
   }
 })

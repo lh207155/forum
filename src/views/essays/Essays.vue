@@ -19,14 +19,17 @@
     data(){
       return {
         modelList:[],
+				// 默认第一页
         page:1
       }
     },
     methods:{
+      // 获取当前页码的文章
       async fetch(){
         const res = await this.$http.get(`/rest/article/list?cate=essays&page=${this.page}`)
         this.modelList = res.data.model
       },
+			// 分页组件翻页时，会调用这个函数来分页查询文章
       currentPage(page){
         this.page = page
         this.fetch()

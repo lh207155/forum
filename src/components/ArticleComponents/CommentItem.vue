@@ -17,8 +17,8 @@
 			</div>
 			<div class="commentFuntion mt-5 flex">
 				<div class="flex-1">
-					<span class="like px-2 mr-2 py-1 text-grey2" :class="{'text-pink':comment.praisers.length}" @click="like"><i class="iconfont icon-like mr-2" :class="{'text-pink2':comment.praisers.length}"></i>{{comment.praisers.length}}</span>
-					<span class="unlike px-2 py-1 text-grey2" :class="{'text-pink':comment.dispraisers.length}"><i class="iconfont icon-unlike mr-2" :class="{'text-pink2':comment.dispraisers.length}"></i>{{comment.dispraisers.length}}</span>
+					<span class="like px-2 mr-2 py-1 text-grey2" :class="{'text-pink':praiseState===1}" @click="praise"><i class="iconfont icon-like mr-2" :class="{'text-pink2':praiseState===1}"></i>{{comment.praisers.length}}</span>
+					<span class="unlike px-2 py-1 text-grey2" :class="{'text-pink':praiseState===2}" @click="dispraise"><i class="iconfont icon-unlike mr-2" :class="{'text-pink2':praiseState===2}"></i>{{comment.dispraisers.length}}</span>
 				</div>
 <!--				<span class="reply">回复</span>-->
 			</div>
@@ -35,17 +35,70 @@
     },
 		data(){
       return {
-        model:''
+        model:'',
+        praiseState:''
 			}
 		},
 		methods:{
-      async fetch(){
-        const res = await this.$http.get(`rest/user/${this.comment.author}`)
-        this.model = res.data.model
+      async initPraiseState(){
+        //查询当前用户对该评论的点赞状态(先判断登录没)
+        //0：未点赞未点踩；1：点赞；2：点踩
+        if(this.$store.state.user){
+          const praiseState = await this.$http.get(`/rest/comment/praiseState/${this.comment._id}`)
+          //给动态class赋值，样式根据动态class变化
+          praiseState.data===0?this.praiseState=0:praiseState.data===1?this.praiseState=1:this.praiseState=2
+        }
 			},
-      async like(){
-        this.comment.praise.push({})
-			}
+      async fetch(){
+        //通过父组件传来的comment查询author
+        const comment = await this.$http.get(`/rest/user/${this.comment.author}`)
+        this.model = comment.data.model
+				await this.initPraiseState()
+			},
+      praise(){
+        //点赞动作（先判断登录没）
+				//如果当前用户已经点了赞：把状态改为0，并且点赞数-1
+				//如果点了踩，状态改为1，并且点赞数+1，点踩数-1（因为点踩和点赞不能共存）
+				//都没有，状态改为1，点赞数+1
+				if(this.$store.state.user) {
+          if(this.praiseState === 1) {
+            this.praiseState = 0
+            this.comment.praisers.length--
+          }else if(this.praiseState === 2){
+            this.praiseState = 1
+            this.comment.praisers.length++
+            this.comment.dispraisers.length--
+          }else{
+            this.praiseState = 1
+            this.comment.praisers.length++
+					}
+          // 最后，发请求修改数据库数据：query：{commentID：文章id，praiseState：动作：{1：点赞或取消点赞操作；2：点踩或取消点餐操作}
+          // 服务器会根据是否点了或没点插入或删除相应的数据
+          this.$http.put(`/rest/comment/praiseState?commentID=${this.comment._id}&praiseState=1`)
+					//重新初始化点赞状态
+        }else{
+          this.$store.commit('toLogin')
+				}
+			},
+      dispraise(){
+        //点踩操作同点赞
+        if(this.$store.state.user) {
+          if(this.praiseState === 2) {
+            this.praiseState = 0
+            this.comment.dispraisers.length--
+          }else if(this.praiseState === 1){
+            this.praiseState = 2
+            this.comment.dispraisers.length++
+            this.comment.praisers.length--
+          }else{
+            this.praiseState = 2
+            this.comment.dispraisers.length++
+          }
+          this.$http.put(`/rest/comment/praiseState?commentID=${this.comment._id}&praiseState=2`)
+        }else {
+          this.$store.commit('toLogin')
+        }
+			},
 		},
 		created() {
 			this.fetch()

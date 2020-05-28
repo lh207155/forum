@@ -320,6 +320,7 @@
 					//只有登录成功了才写入token
           localStorage.setItem('token',res.data.token)
 					this.message1=''
+          window.location.reload()
         }catch (e) {
           // 失败，拿到错误信息，并显示
 					this.message1 = e.response.data.message

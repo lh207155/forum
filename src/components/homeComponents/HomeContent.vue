@@ -3,7 +3,7 @@
 		<div class="leftSide">
 			<ArticleListCard></ArticleListCard>
 		</div>
-		<div class="rightSide flex fd-c ml-3">
+		<div class="rightSide flex fd-c ml-3 flex-1">
 			<UserInfoCard class=""></UserInfoCard>
 			<SignInCard class="mt-3"></SignInCard>
 			<NewsFlashCard class="mt-3"></NewsFlashCard>
@@ -29,7 +29,7 @@
 		width: 91.667rem;
 		margin:auto;
 		.rightSide{
-			width: 100%;
+			width: 1px;
 		}
 	}
 

@@ -43,7 +43,7 @@ const routes = [
       },
       {
         path:'videos',
-        component: Videos
+        component: Videos,
       },
       {
         path: 'profile',
@@ -54,16 +54,32 @@ const routes = [
         },
         children:[
           {
+            path:'/',
+            component:Overview,
+            meta: {
+              requireLogin:true
+            },
+          },
+          {
             path:'overview',
-            component:Overview
+            component:Overview,
+            meta: {
+              requireLogin:true
+            },
           },
           {
             path:'published',
-            component:Published
+            component:Published,
+            meta: {
+              requireLogin:true
+            },
           },
           {
             path:'collection',
-            component:Collection
+            component:Collection,
+            meta: {
+              requireLogin:true
+            },
           },
         ]
       },
@@ -76,7 +92,10 @@ const router = new VueRouter({
 })
 router.beforeEach((to,from,next)=>{
   if(to.meta.requireLogin&&!store.state.user){
+    store.commit('toLogin')
     return next('/')
+  }else{
+    next()
   }
   if(to.path === '/profile/overview'){
     store.commit('switchProfileCard',1)
@@ -88,8 +107,6 @@ router.beforeEach((to,from,next)=>{
   }
   if(to.path === '/profile/collection'){
     store.commit('switchProfileCard',3)
-    next()
-  }else{
     next()
   }
 })

@@ -1,9 +1,10 @@
 <template>
 	<div class="contentBack bg-grey">
 		<TheHeader class="header-fixed" :class="{hiddenBanner:hiddenBanner}"></TheHeader>
-		<router-view class="forFooterPadding"></router-view>
+		<router-view class="forFooterPadding" :key='$route.path'></router-view>
 		<TheFooter></TheFooter>
 		<TheRegisterLoginCard></TheRegisterLoginCard>
+		<SideToolBar></SideToolBar>
 	</div>
 </template>
 
@@ -11,9 +12,11 @@
 	import TheHeader from '../components/globalComponents/TheHeader'
 	import TheFooter from '../components/globalComponents/TheFooter'
 	import TheRegisterLoginCard from '../components/globalComponents/TheRegisterLoginCard'
+  import SideToolBar from "../components/globalComponents/SideToolBar";
   export default {
     name: "Main",
     components:{
+      SideToolBar,
       TheHeader,TheFooter,TheRegisterLoginCard
     },
 		data(){

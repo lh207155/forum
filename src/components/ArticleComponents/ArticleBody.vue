@@ -29,7 +29,7 @@
 		<div class="contentCopyright flex fd-c jc-sa ai-c text-white">
 			<p class="mt-2">有些资源有时效性,且用且珍惜。</p>
 			<p>文章均为玉簟秋整理分享,仅作个人学习使用,转载请注明链接,谢谢！</p>
-			<p class="mb-2"><router-link tag="span" to="/" class="returnHome text-white">返回首页</router-link><span> | </span><router-link tag="span" to="/" class="returnTop text-white">回到顶部</router-link></p>
+			<p class="mb-2"><router-link tag="span" to="/" class="returnHome text-white">返回首页</router-link><span> | </span><span @click="toTop" class="returnTop text-white">回到顶部</span></p>
 		</div>
 		<div class="share flex jc-sb mt-5 borderBottom">
 			<div class="shareMenu text-blackOpacity">
@@ -64,18 +64,28 @@
 		methods:{
       //点击收藏按钮
       async collection(){
-        if(!this.collectionState){
-          await this.$http.put(`/rest/article/collection/${this.model._id}`)
-          this.collectionState = !this.collectionState
-				}else {
-          await this.$http.put(`/rest/article/unCollection/${this.model._id}`)
-          this.collectionState = !this.collectionState
+        //先判断有没有登录
+        if(this.$store.state.user){
+          //如果已经收藏过了，点击就是取消收藏
+          //如果没有收藏过，点击就是收藏
+          if(!this.collectionState){
+            await this.$http.put(`/rest/article/collection/${this.model._id}`)
+            this.collectionState = !this.collectionState
+          }else {
+            await this.$http.put(`/rest/article/unCollection/${this.model._id}`)
+            this.collectionState = !this.collectionState
+          }
+				}else{
+          this.$store.commit('toLogin')
 				}
 			}
 		},
 		created() {
+      // 先判断有没有登录
       // 页面初始化时，判断该文章是否已被当前用户收藏
-      this.collectionState = this.$store.state.user.collections.some(id=>id===this.model._id)
+      if(this.$store.state.user) {
+        this.collectionState = this.$store.state.user.collections.some(id => id === this.model._id)
+      }
     }
   }
 </script>

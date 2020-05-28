@@ -1,11 +1,14 @@
 <template>
   <div class="header bg-white mb-3">
     <div class="header-banner bg-pink">
-      <ul class="header-banner-menu flex jc-s ai-c text-white">
+      <ul class="header-banner-menu flex jc-s text-white ">
         <li class="header-banner-item">公告</li>
         <li class="header-banner-item"><i class="iconfont icon-huiyuan"></i>会员</li>
         <li class="header-banner-item">永久地址</li>
-        <li class="header-banner-item"><i class="iconfont icon-qiandao"></i>签到</li>
+        <li class="header-banner-item sign">
+          <i class="iconfont icon-qiandao"></i><span> 签到</span>
+          <Calendar class="calender"></Calendar>
+        </li>
         <li class="header-banner-item">红包</li>
       </ul>
     </div>
@@ -59,8 +62,10 @@
 </template>
 
 <script>
+  import Calendar from "./Calendar";
   export default {
     name: "FHeader",
+    components: {Calendar},
     data(){
       return {
         popUserNav:false
@@ -102,7 +107,7 @@
         //设置vuex状态
         this.$store.commit('exit')
         //重载页面，让路由守卫判断是否需要登录
-        location.reload()
+        window.location.reload()
       }
     },
     computed:{
@@ -124,7 +129,7 @@
     z-index: 100;
     .header-banner{
       height: 3.167rem;
-      width: 100vw;
+      /*width: 100vw;*/
       background-image: url("../../assets/imgs/bg-top.png");
       .header-banner-menu{
         list-style: none;
@@ -133,19 +138,38 @@
         height: 100%;
         margin: 0 auto;
         .header-banner-item{
+          height: 100%;
+          line-height: 3.167rem;
           cursor: pointer;
-          opacity: .8;
+          /*为了不影响子元素的透明度，设置rgba，而不是opacity，因为无论如何子元素都会继承父元素的opacity*/
+          color: rgba(255,255,255,.8);
           transition: opacity .3s ease-out;
           margin-right: 1.167rem;
+          &.sign{
+            position: relative;
+            .calender{
+              position: absolute;
+              opacity: 0;
+              transition: opacity .3s;
+              visibility: hidden;
+              top:3.167rem;
+            }
+            &:hover .calender{
+              visibility: initial;
+              opacity: 1;
+            }
+            
+          }
           &:hover{
-            opacity: 1;
+            color: rgba(255,255,255,1);
+
           }
         }
       }
     }
     .header-nav{
       height: 4.833rem;
-      width: 100vw;
+      /*width: 100vw;*/
       .header-nav-wrapper{
         width: 91.667rem;
         height: 100%;

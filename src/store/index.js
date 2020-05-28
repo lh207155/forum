@@ -10,7 +10,14 @@ export default new Vuex.Store({
     //user信息在axios拦截器拦截了res之后首先存进session，然后state初始化从session里拿，防止刷新页面状态丢失
     //先判断有没有，不然报Unexpected end of JSON input
     user: sessionStorage.user?JSON.parse(sessionStorage.user):'',
-    profileCardIndex:1
+    // 个人中心信息卡索引
+    profileCardIndex:1,
+  },
+  getters:{
+    // 计算用户今日有无签到
+    signed(state){
+      return new Date().setHours(0,0,0,0) === new Date(state.user.lastSignDate).setHours(0,0,0,0)
+    }
   },
   mutations: {
     toLogin(state){
